@@ -52,7 +52,7 @@ function updateContent({ editorRef, text }: UpdateContentParams) {
 
 function generateCustomPreview(text: string) {
   return {
-    plain: 'Created with Cream Editor',
+    plain: 'Created with Markdown Visual',
   };
 }
 
