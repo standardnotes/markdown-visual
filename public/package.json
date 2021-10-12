@@ -1,7 +1,8 @@
 {
-  "name": "standard-notes-editor-template-cra-typescript",
+  "name": "cream-editor",
   "version": "0.1.0",
-  "description": "Template for building editors for Standard Notes using Create React App and TypeScript",
+  "author": "Johnny Almonte <johnny@standardnotes.org>",
+  "description": "A lightweight WYSIWYG markdown editor, derivated from Milkdown editor",
   "keywords": [
     "Standard Notes",
     "Standard Notes Extensions"
@@ -10,12 +11,12 @@
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://github.com/standardnotes/editor-template-cra-typescript.git"
+    "url": "https://github.com/standardnotes/cream-editor.git"
   },
   "bugs": {
-    "url": "https://github.com/standardnotes/editor-template-cra-typescript/issues"
+    "url": "https://github.com/standardnotes/cream-editor/issues"
   },
   "sn": {
-    "main": "index.html"
+    "main": "build/index.html"
   }
 }
