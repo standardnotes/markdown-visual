@@ -4,11 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 
-import CreamEditor from './components/CreamEditor';
+import MarkdownVisual from './components/MarkdownVisual';
 
 ReactDOM.render(
   <React.StrictMode>
-    <CreamEditor />
+    <MarkdownVisual />
   </React.StrictMode>,
   document.getElementById('root')
 );

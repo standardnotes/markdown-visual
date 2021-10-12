@@ -1,6 +1,6 @@
 {
-  "identifier": "org.standardnotes.cream-editor-dev",
-  "name": "Cream Editor - Dev",
+  "identifier": "org.standardnotes.markdown-visual-dev",
+  "name": "Markdown Visual - Dev",
   "content_type": "SN|Component",
   "area": "editor-editor",
   "version": "0.1.0",
@@ -8,6 +8,6 @@
   "url": "http://localhost:3001/index.html",
   "download_url": "",
   "latest_url": "",
-  "marketing_url": "https://github.com/standardnotes/cream-editor",
+  "marketing_url": "https://github.com/standardnotes/markdown-visual",
   "thumbnail_url": ""
 }

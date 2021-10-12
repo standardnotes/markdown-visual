@@ -1,4 +1,4 @@
-# cream-editor
+# markdown-visual
 
 A lightweight WYSIWYG markdown editor, derivated from Milkdown editor
 
@@ -8,9 +8,9 @@ A lightweight WYSIWYG markdown editor, derivated from Milkdown editor
 
 The general instructions setting up an environment to develop Standard Notes extensions can be found [here](https://docs.standardnotes.org/extensions/local-setup). You can also follow these instructions:
 
-1. Fork the [repository](https://github.com/standardnotes/cream-editor) on GitHub.
+1. Fork the [repository](https://github.com/standardnotes/markdown-visual) on GitHub.
 2. [Clone](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository) your fork of the repository.
-3. Run `cd cream-editor` to enter the `cream-editor` directory.
+3. Run `cd markdown-visual` to enter the `markdown-visual` directory.
 4. Run `yarn install` to install the dependencies on your machine as they are described in `yarn.lock`.
 
 ### Testing in the browser

@@ -56,7 +56,7 @@ function generateCustomPreview(text: string) {
   };
 }
 
-const CreamEditor: React.FC = () => {
+const MarkdownVisual: React.FC = () => {
   const editorRef = useRef<EditorRef | null>(null);
 
   const editorKitDelegate = {
@@ -100,4 +100,4 @@ const CreamEditor: React.FC = () => {
   return <ReactEditor ref={editorRef} editor={editor} />;
 };
 
-export default CreamEditor;
+export default MarkdownVisual;
