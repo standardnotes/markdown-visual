@@ -1,8 +1,7 @@
-import React, { useRef } from 'react';
-import { Editor, rootCtx, editorViewCtx, parserCtx, Ctx } from '@milkdown/core';
+import React, { forwardRef } from 'react';
+import { Ctx, Editor, editorViewCtx, parserCtx, rootCtx } from '@milkdown/core';
 import { EditorRef, ReactEditor, useEditor } from '@milkdown/react';
 import { Slice } from 'prosemirror-model';
-import EditorKit from '@standardnotes/editor-kit';
 
 // Milkdown editor plugins & themes
 import { nord } from '@milkdown/theme-nord';
@@ -14,19 +13,15 @@ import { prism } from '@milkdown/plugin-prism';
 import { math } from '@milkdown/plugin-math';
 import { slash } from '@milkdown/plugin-slash';
 import { tooltip } from '@milkdown/plugin-tooltip';
-import { Listener, listener, listenerCtx } from '@milkdown/plugin-listener';
+import { listener, listenerCtx } from '@milkdown/plugin-listener';
 
-type UpdateContentParams = {
+type SetEditorTextParams = {
   editorRef: React.MutableRefObject<EditorRef | null>;
   text: string;
 };
 
-function updateContent({ editorRef, text }: UpdateContentParams) {
-  if (!editorRef.current) {
-    return;
-  }
-
-  const editor = editorRef.current.get();
+export const setEditorText = ({ editorRef, text }: SetEditorTextParams) => {
+  const editor = editorRef.current?.get();
   if (!editor) {
     return;
   }
@@ -41,49 +36,53 @@ function updateContent({ editorRef, text }: UpdateContentParams) {
     }
 
     const { state } = view;
-
     view.dispatch(
       state.tr
         .replace(0, state.doc.content.size, new Slice(document.content, 0, 0))
         .setMeta('addToHistory', false)
     );
   });
-}
+};
 
-function generateCustomPreview(text: string) {
-  return {
-    plain: 'Created with Markdown Visual',
-  };
-}
+type SetEditableParams = {
+  editorRef: React.MutableRefObject<EditorRef | null>;
+  isEditable: boolean;
+};
 
-const MarkdownVisual: React.FC = () => {
-  const editorRef = useRef<EditorRef | null>(null);
+export const setEditable = ({ editorRef, isEditable }: SetEditableParams) => {
+  const editor = editorRef.current?.get();
+  if (!editor) {
+    return;
+  }
 
-  const editorKitDelegate = {
-    setEditorRawText: (text: string) => updateContent({ editorRef, text }),
-    generateCustomPreview,
-    clearUndoHistory: () => {},
-  };
-
-  const editorKit = new EditorKit(editorKitDelegate, {
-    mode: 'markdown',
-    supportsFilesafe: false,
+  editor.action((ctx: Ctx) => {
+    const view = ctx.get(editorViewCtx);
+    view.setProps({
+      editable: () => isEditable,
+    });
   });
+};
 
-  const contentListener: Listener = {
-    markdown: [
-      (getText) => {
-        const text = getText();
-        editorKit.onEditorValueChanged(text);
-      },
-    ],
-  };
+type MarkdownVisualProps = {
+  onChange: (text: string) => void;
+};
 
+const MarkdownVisual = (
+  { onChange }: MarkdownVisualProps,
+  ref: React.ForwardedRef<EditorRef>
+) => {
   const editor = useEditor((root) =>
     Editor.make()
       .config((ctx) => {
         ctx.set(rootCtx, root);
-        ctx.set(listenerCtx, contentListener);
+        ctx.set(listenerCtx, {
+          markdown: [
+            (getText) => {
+              const text = getText();
+              onChange(text);
+            },
+          ],
+        });
       })
       .use(nord)
       .use(commonmark)
@@ -97,7 +96,7 @@ const MarkdownVisual: React.FC = () => {
       .use(tooltip)
   );
 
-  return <ReactEditor ref={editorRef} editor={editor} />;
+  return <ReactEditor ref={ref} editor={editor} />;
 };
 
-export default MarkdownVisual;
+export default forwardRef(MarkdownVisual);
