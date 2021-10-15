@@ -7,6 +7,7 @@ import { Slice } from 'prosemirror-model';
 import { nord } from '@milkdown/theme-nord';
 import { commonmark } from '@milkdown/preset-commonmark';
 import { clipboard } from '@milkdown/plugin-clipboard';
+import { emoji } from '@milkdown/plugin-emoji';
 import { gfm } from '@milkdown/preset-gfm';
 import { history } from '@milkdown/plugin-history';
 import { prism } from '@milkdown/plugin-prism';
@@ -87,6 +88,7 @@ const MarkdownVisual = (
       .use(nord)
       .use(commonmark)
       .use(clipboard)
+      .use(emoji)
       .use(gfm)
       .use(history)
       .use(listener)
