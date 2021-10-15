@@ -47,4 +47,9 @@ html {
 .milkdown {
   max-width: 100% !important;
   box-shadow: none !important;
+
+  .emoji {
+    height: 1.5rem !important;
+    width: 1.5rem !important;
+  }
 }
