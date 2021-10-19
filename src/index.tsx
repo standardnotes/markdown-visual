@@ -10,6 +10,7 @@ import EditorKit from '@standardnotes/editor-kit';
 import MarkdownVisual, {
   setEditable,
   setEditorText,
+  getTextPreview,
 } from './components/MarkdownVisual';
 
 const MarkdownVisualWrapper: React.FC = () => {
@@ -33,18 +34,8 @@ const MarkdownVisualWrapper: React.FC = () => {
         setEditorText({ editorRef, text });
       },
       generateCustomPreview: (text: string) => {
-        const format = (value: number) =>
-          value.toLocaleString('en-US', {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          });
-
-        const kbSize = Buffer.byteLength(text) / 1024;
-
         return {
-          html:
-            `<span>~${format(kbSize)} KB worth of text.</span>` +
-            '<div><em>Created with Markdown Visual.</em></div>',
+          plain: getTextPreview({ editorRef, text }),
         };
       },
       onNoteLockToggle: (isLocked: boolean) => {

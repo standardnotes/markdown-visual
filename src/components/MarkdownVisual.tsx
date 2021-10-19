@@ -64,6 +64,29 @@ export const setEditable = ({ editorRef, isEditable }: SetEditableParams) => {
   });
 };
 
+type GetTextPreviewParams = {
+  editorRef: React.MutableRefObject<EditorRef | null>;
+  text: string;
+};
+
+export const getTextPreview = ({ editorRef, text }: GetTextPreviewParams) => {
+  const editor = editorRef.current?.get();
+  if (!editor) {
+    return '';
+  }
+
+  return editor.action((ctx: Ctx) => {
+    const parser = ctx.get(parserCtx);
+
+    const document = parser(text);
+    if (!document) {
+      return '';
+    }
+
+    return document.textContent;
+  });
+};
+
 type MarkdownVisualProps = {
   onChange: (text: string) => void;
 };
