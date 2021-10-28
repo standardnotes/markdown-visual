@@ -51,3 +51,14 @@ html {
     padding: 2.25rem 2.25rem !important;
   }
 }
+
+.app-header {
+  text-align: right;
+  width: 100%;
+  padding-top: 5px;
+}
+
+.app-header .toggle-button {
+  cursor: pointer;
+  padding-right: 15px;
+}

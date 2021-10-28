@@ -21,7 +21,7 @@ type SetEditorTextParams = {
   text: string;
 };
 
-export const setEditorText = ({ editorRef, text }: SetEditorTextParams) => {
+export const setMVEditorText = ({ editorRef, text }: SetEditorTextParams) => {
   const editor = editorRef.current?.get();
   if (!editor) {
     return;
@@ -50,7 +50,7 @@ type SetEditableParams = {
   isEditable: boolean;
 };
 
-export const setEditable = ({ editorRef, isEditable }: SetEditableParams) => {
+export const setMVEditable = ({ editorRef, isEditable }: SetEditableParams) => {
   const editor = editorRef.current?.get();
   if (!editor) {
     return;
@@ -69,7 +69,7 @@ type GetTextPreviewParams = {
   text: string;
 };
 
-export const getTextPreview = ({ editorRef, text }: GetTextPreviewParams) => {
+export const getMVTextPreview = ({ editorRef, text }: GetTextPreviewParams) => {
   const editor = editorRef.current?.get();
   if (!editor) {
     return '';
@@ -85,6 +85,20 @@ export const getTextPreview = ({ editorRef, text }: GetTextPreviewParams) => {
 
     return document.textContent;
   });
+};
+
+type SetWidthParams = {
+  editorRef: React.MutableRefObject<EditorRef | null>;
+  width: string;
+};
+
+export const setMVWidth = ({ editorRef, width }: SetWidthParams) => {
+  const editorDom = editorRef.current?.dom();
+  if (!editorDom) {
+    return;
+  }
+
+  editorDom.style.width = width;
 };
 
 type MarkdownVisualProps = {

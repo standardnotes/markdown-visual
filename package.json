@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.15.8",
+    "@codemirror/lang-markdown": "^0.19.1",
     "@fontsource/roboto": "^4.5.1",
     "@milkdown/core": "^4.13.2",
     "@milkdown/plugin-clipboard": "^4.13.2",
@@ -63,6 +64,7 @@
     "@types/node": "^14.14.14",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@uiw/react-codemirror": "^4.1.0",
     "filesafe-embed": "^1.0.10",
     "filesafe-js": "^1.0.4",
     "gh-pages": "^3.1.0",
@@ -74,6 +76,7 @@
     "prettier": "^2.2.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-icons": "^4.3.1",
     "react-scripts": "4.0.3",
     "sn-stylekit": "5.2.8",
     "source-map-explorer": "^2.5.1",

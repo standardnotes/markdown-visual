@@ -5,25 +5,51 @@ import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 
 import { EditorRef } from '@milkdown/react';
-
-import EditorKit from '@standardnotes/editor-kit';
 import MarkdownVisual, {
-  setEditable,
-  setEditorText,
-  getTextPreview,
+  setMVEditable,
+  setMVEditorText,
+  getMVTextPreview,
+  setMVWidth,
 } from './components/MarkdownVisual';
 
-const MarkdownVisualWrapper: React.FC = () => {
-  const editorRef = createRef<EditorRef>();
+import { ReactCodeMirrorRef } from '@uiw/react-codemirror';
+import CodeMirror, {
+  getCMDisplay,
+  setCMEditable,
+  setCMEditorText,
+  setCMStyle,
+} from './components/CodeMirror';
+
+import { RiBookReadLine } from 'react-icons/ri';
+
+import EditorKit from '@standardnotes/editor-kit';
+
+const AppWrapper: React.FC = () => {
+  const markdownVisualRef = createRef<EditorRef>();
+  const codeMirrorRef = createRef<ReactCodeMirrorRef>();
+
   const prevTextRef = useRef('');
   const editorKitRef = useRef<any>();
 
-  const onChange = (text: string) => {
+  const onMilkdownChange = (text: string) => {
+    if (prevTextRef.current.trim() === text.trim()) {
+      return;
+    }
+
+    prevTextRef.current = text;
+
+    setCMEditorText({ editorRef: codeMirrorRef, text });
+    editorKitRef.current.onEditorValueChanged(text);
+  };
+
+  const onCodeMirrorChange = (text: string) => {
     if (prevTextRef.current === text) {
       return;
     }
 
     prevTextRef.current = text;
+
+    setMVEditorText({ editorRef: markdownVisualRef, text });
     editorKitRef.current.onEditorValueChanged(text);
   };
 
@@ -31,16 +57,18 @@ const MarkdownVisualWrapper: React.FC = () => {
     const editorKitDelegate = {
       setEditorRawText: (text: string) => {
         prevTextRef.current = text;
-        setEditorText({ editorRef, text });
+        setMVEditorText({ editorRef: markdownVisualRef, text });
+        setCMEditorText({ editorRef: codeMirrorRef, text });
       },
       generateCustomPreview: (text: string) => {
         return {
-          plain: getTextPreview({ editorRef, text }),
+          plain: getMVTextPreview({ editorRef: markdownVisualRef, text }),
         };
       },
       onNoteLockToggle: (isLocked: boolean) => {
         const isEditable = !isLocked;
-        setEditable({ editorRef, isEditable });
+        setMVEditable({ editorRef: markdownVisualRef, isEditable });
+        setCMEditable({ editorRef: codeMirrorRef, isEditable });
       },
       clearUndoHistory: () => {},
     };
@@ -49,14 +77,66 @@ const MarkdownVisualWrapper: React.FC = () => {
       mode: 'markdown',
       supportsFilesafe: false,
     });
-  }, [editorRef]);
 
-  return <MarkdownVisual ref={editorRef} onChange={onChange} />;
+    setMVWidth({
+      editorRef: markdownVisualRef,
+      width: '100%',
+    });
+  });
+
+  const toggleSplitView = () => {
+    const codeMirrorDisplay = getCMDisplay({
+      editorRef: codeMirrorRef,
+    });
+
+    const newDisplay = codeMirrorDisplay === 'block' ? 'none' : 'block';
+
+    setCMStyle({
+      editorRef: codeMirrorRef,
+      display: newDisplay,
+      width: newDisplay === 'none' ? '0%' : '50%',
+    });
+
+    setMVWidth({
+      editorRef: markdownVisualRef,
+      width: newDisplay === 'none' ? '100%' : '50%',
+    });
+  };
+
+  const styles = {
+    splitView: {
+      display: 'flex',
+    },
+    rightPane: {
+      width: '50%',
+      display: 'none',
+    },
+  };
+
+  return (
+    <>
+      <div className="app-header">
+        <RiBookReadLine
+          className="toggle-button"
+          onClick={toggleSplitView}
+          size={32}
+        />
+      </div>
+      <div style={styles.splitView}>
+        <MarkdownVisual ref={markdownVisualRef} onChange={onMilkdownChange} />
+        <CodeMirror
+          ref={codeMirrorRef}
+          onChange={onCodeMirrorChange}
+          style={styles.rightPane}
+        />
+      </div>
+    </>
+  );
 };
 
 ReactDOM.render(
   <React.StrictMode>
-    <MarkdownVisualWrapper />
+    <AppWrapper />
   </React.StrictMode>,
   document.getElementById('root')
 );
