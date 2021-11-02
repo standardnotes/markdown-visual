@@ -39,16 +39,11 @@ html {
 .milkdown {
   max-width: 100% !important;
   box-shadow: none !important;
+  padding: 0 2.25rem !important;
 
   .emoji {
     height: 1.5rem !important;
     width: 1.5rem !important;
-  }
-}
-
-@media only screen and (min-width: 72rem) {
-  .milkdown {
-    padding: 0 2.25rem !important;
   }
 }
 
@@ -61,4 +56,9 @@ html {
 .app-header .toggle-button {
   cursor: pointer;
   padding-right: 15px;
+}
+
+.milkdown .editor > * {
+  margin-top: 0 !important;
+  margin-bottom: 1.875rem !important;
 }
