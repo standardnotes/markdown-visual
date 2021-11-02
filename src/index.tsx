@@ -106,6 +106,7 @@ const AppWrapper: React.FC = () => {
   const styles = {
     splitView: {
       display: 'flex',
+      marginTop: '2rem',
     },
     rightPane: {
       width: '50%',
