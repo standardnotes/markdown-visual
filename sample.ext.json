@@ -5,7 +5,7 @@
   "area": "editor-editor",
   "version": "0.1.0",
   "description": "A lightweight WYSIWYG markdown editor, derivated from Milkdown editor",
-  "url": "http://localhost:3001/index.html",
+  "url": "http://localhost:8001/index.html",
   "download_url": "",
   "latest_url": "",
   "marketing_url": "https://github.com/standardnotes/markdown-visual",
