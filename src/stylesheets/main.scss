@@ -40,6 +40,8 @@ html {
   max-width: 100% !important;
   box-shadow: none !important;
   padding: 0 2.25rem !important;
+  background-color: var(--sn-stylekit-background-color) !important;
+  color: var(--sn-stylekit-editor-foreground-color) !important;
 
   .emoji {
     height: 1.5rem !important;
@@ -56,9 +58,19 @@ html {
 .app-header .toggle-button {
   cursor: pointer;
   padding-right: 15px;
+  color: var(--sn-stylekit-editor-foreground-color) !important;
 }
 
 .milkdown .editor > * {
   margin-top: 0 !important;
   margin-bottom: 1.875rem !important;
+}
+
+.cm-editor {
+  background-color: var(--sn-stylekit-background-color) !important;
+  color: var(--sn-stylekit-editor-foreground-color) !important;
+
+  .cm-content {
+    caret-color: var(--sn-stylekit-editor-foreground-color) !important;
+  }
 }
