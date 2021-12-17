@@ -1,13 +1,14 @@
 {
-  "identifier": "org.standardnotes.markdown-visual-dev",
   "name": "Markdown Visual - Dev",
+  "note_type": "markdown",
+  "file_type": "md",
+  "interchangeable": false,
+  "identifier": "org.standardnotes.markdown-visual-dev",
   "content_type": "SN|Component",
   "area": "editor-editor",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A lightweight WYSIWYG markdown editor, derivated from Milkdown editor",
-  "url": "http://localhost:8001/index.html",
-  "download_url": "",
-  "latest_url": "",
-  "marketing_url": "https://github.com/standardnotes/markdown-visual",
-  "thumbnail_url": ""
+  "url": "http://localhost:8001/",
+  "marketing_url": "",
+  "flags": ["New"]
 }

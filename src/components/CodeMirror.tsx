@@ -37,6 +37,24 @@ export const setCMEditorText = ({ editorRef, text }: SetEditorTextParams) => {
   });
 };
 
+type SetLineWrappingParams = {
+  editorRef: React.MutableRefObject<ReactCodeMirrorRef | null>;
+};
+
+export const setCMLineWrapping = ({ editorRef }: SetLineWrappingParams) => {
+  const view = editorRef.current?.view;
+  if (!view) {
+    return;
+  }
+
+  const extension = [];
+  extension.push(EditorView.lineWrapping);
+
+  view.dispatch({
+    effects: StateEffect.reconfigure.of(extension),
+  });
+};
+
 type SetEditableParams = {
   editorRef: React.MutableRefObject<ReactCodeMirrorRef | null>;
   isEditable: boolean;

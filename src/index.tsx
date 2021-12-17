@@ -17,6 +17,7 @@ import CodeMirror, {
   getCMDisplay,
   setCMEditable,
   setCMEditorText,
+  setCMLineWrapping,
   setCMStyle,
 } from './components/CodeMirror';
 
@@ -100,6 +101,10 @@ const AppWrapper: React.FC = () => {
     setMVWidth({
       editorRef: markdownVisualRef,
       width: newDisplay === 'none' ? '100%' : '50%',
+    });
+
+    setCMLineWrapping({
+      editorRef: codeMirrorRef,
     });
   };
 
