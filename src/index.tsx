@@ -1,149 +1,218 @@
 import './stylesheets/main.scss';
 
-import React, { createRef, useEffect, useRef } from 'react';
+import { Component, createRef, StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import reportWebVitals from './reportWebVitals';
 
-import { EditorRef } from '@milkdown/react';
-import MarkdownVisual, {
-  setMVEditable,
-  setMVEditorText,
-  getMVTextPreview,
-  setMVWidth,
-} from './components/MarkdownVisual';
+import MilkdownEditor, { MilkdownRef } from './components/Milkdown';
+import CodeMirrorEditor, { CodeMirrorRef } from './components/CodeMirror';
+import SplitView, { SplitViewDirection } from './components/SplitView';
 
-import { ReactCodeMirrorRef } from '@uiw/react-codemirror';
-import CodeMirror, {
-  getCMDisplay,
-  setCMEditable,
-  setCMEditorText,
-  setCMLineWrapping,
-  setCMStyle,
-} from './components/CodeMirror';
+import EditorKit, { EditorKitDelegate } from '@standardnotes/editor-kit';
+import { marked } from 'marked';
 
-import { RiBookReadLine } from 'react-icons/ri';
+import {
+  MenuConfig,
+  menuConfig,
+} from './components/Milkdown/plugins/advanced-menu/config';
 
-import EditorKit from '@standardnotes/editor-kit';
+enum TextChangeSource {
+  Milkdown = 'milkdown',
+  CodeMirror = 'codemirror',
+}
 
-const AppWrapper: React.FC = () => {
-  const markdownVisualRef = createRef<EditorRef>();
-  const codeMirrorRef = createRef<ReactCodeMirrorRef>();
-
-  const prevTextRef = useRef('');
-  const editorKitRef = useRef<any>();
-
-  const onMilkdownChange = (text: string) => {
-    if (prevTextRef.current.trim() === text.trim()) {
-      return;
-    }
-
-    prevTextRef.current = text;
-
-    setCMEditorText({ editorRef: codeMirrorRef, text });
-    editorKitRef.current.onEditorValueChanged(text);
-  };
-
-  const onCodeMirrorChange = (text: string) => {
-    if (prevTextRef.current === text) {
-      return;
-    }
-
-    prevTextRef.current = text;
-
-    setMVEditorText({ editorRef: markdownVisualRef, text });
-    editorKitRef.current.onEditorValueChanged(text);
-  };
-
-  useEffect(() => {
-    const editorKitDelegate = {
-      setEditorRawText: (text: string) => {
-        prevTextRef.current = text;
-        setMVEditorText({ editorRef: markdownVisualRef, text });
-        setCMEditorText({ editorRef: codeMirrorRef, text });
-      },
-      generateCustomPreview: (text: string) => {
-        return {
-          plain: getMVTextPreview({ editorRef: markdownVisualRef, text }),
-        };
-      },
-      onNoteLockToggle: (isLocked: boolean) => {
-        const isEditable = !isLocked;
-        setMVEditable({ editorRef: markdownVisualRef, isEditable });
-        setCMEditable({ editorRef: codeMirrorRef, isEditable });
-      },
-      clearUndoHistory: () => {},
-    };
-
-    editorKitRef.current = new EditorKit(editorKitDelegate, {
-      mode: 'markdown',
-      supportsFilesafe: false,
-    });
-
-    setMVWidth({
-      editorRef: markdownVisualRef,
-      width: '100%',
-    });
-  });
-
-  const toggleSplitView = () => {
-    const codeMirrorDisplay = getCMDisplay({
-      editorRef: codeMirrorRef,
-    });
-
-    const newDisplay = codeMirrorDisplay === 'block' ? 'none' : 'block';
-
-    setCMStyle({
-      editorRef: codeMirrorRef,
-      display: newDisplay,
-      width: newDisplay === 'none' ? '0%' : '50%',
-    });
-
-    setMVWidth({
-      editorRef: markdownVisualRef,
-      width: newDisplay === 'none' ? '100%' : '50%',
-    });
-
-    setCMLineWrapping({
-      editorRef: codeMirrorRef,
-    });
-  };
-
-  const styles = {
-    splitView: {
-      display: 'flex',
-      marginTop: '2rem',
-    },
-    rightPane: {
-      width: '50%',
-      display: 'none',
-    },
-  };
-
-  return (
-    <>
-      <div className="app-header">
-        <RiBookReadLine
-          className="toggle-button"
-          onClick={toggleSplitView}
-          size={32}
-        />
-      </div>
-      <div style={styles.splitView}>
-        <MarkdownVisual ref={markdownVisualRef} onChange={onMilkdownChange} />
-        <CodeMirror
-          ref={codeMirrorRef}
-          onChange={onCodeMirrorChange}
-          style={styles.rightPane}
-        />
-      </div>
-    </>
-  );
+type AppProps = {};
+type AppState = {
+  splitView: boolean;
+  editable: boolean;
+  spellcheck: boolean;
+  isLoading: boolean;
 };
 
+class AppWrapper extends Component<AppProps, AppState> {
+  private editorKit?: EditorKit;
+  private prevText: string = '';
+
+  private milkdownRef = createRef<MilkdownRef>();
+  private codeMirrorRef = createRef<CodeMirrorRef>();
+
+  constructor(props: AppProps) {
+    super(props);
+
+    this.state = {
+      splitView: false,
+      editable: true,
+      spellcheck: true,
+      isLoading: true,
+    };
+  }
+
+  componentDidMount() {
+    this.configureEditorKit();
+  }
+
+  private configureEditorKit() {
+    const editorKitDelegate: EditorKitDelegate = {
+      setEditorRawText: (text: string) => {
+        this.prevText = text.trim();
+
+        this.updateMilkdownText(this.prevText);
+        this.updateCodeMirrorText(this.prevText);
+
+        this.setState({
+          isLoading: false,
+        });
+      },
+      generateCustomPreview: (text: string) => {
+        const htmlPreview = marked.parse(text);
+        const tmpElement = document.createElement('div');
+        tmpElement.innerHTML = htmlPreview;
+
+        const preview = tmpElement.textContent || tmpElement.innerText || '';
+
+        return {
+          plain: this.truncateString(preview).trim(),
+        };
+      },
+      onNoteValueChange: async (note: any) => {
+        const editable =
+          !note.content.appData['org.standardnotes.sn'].locked ?? true;
+        const spellcheck = note.content.spellcheck;
+
+        this.setState({
+          editable,
+          spellcheck,
+        });
+      },
+      onNoteLockToggle: (locked: boolean) => {
+        const editable = !locked;
+
+        this.setState({
+          editable,
+        });
+      },
+    };
+
+    this.editorKit = new EditorKit(editorKitDelegate, {
+      mode: 'markdown',
+      supportsFileSafe: false,
+    });
+  }
+
+  private updateMilkdownText(text: string) {
+    const { current } = this.milkdownRef;
+    if (current) {
+      current.update(text);
+    }
+  }
+
+  private updateCodeMirrorText(text: string) {
+    const { current } = this.codeMirrorRef;
+    if (current) {
+      current.update(text);
+    }
+  }
+
+  private onTextChange = (text: string, source = TextChangeSource.Milkdown) => {
+    if (this.prevText === text.trim()) {
+      return;
+    }
+
+    this.prevText = text.trim();
+    this.editorKit!.onEditorValueChanged(text);
+
+    /**
+     * Bi-directional text update:
+     *
+     * - Codemirror <- Milkdown
+     * - Milkdown -> Codemirror
+     */
+    switch (source) {
+      case TextChangeSource.CodeMirror:
+        this.updateMilkdownText(this.prevText);
+        break;
+      case TextChangeSource.Milkdown:
+      default:
+        this.updateCodeMirrorText(this.prevText);
+        break;
+    }
+  };
+
+  private toggleSplitView = () => {
+    const { splitView } = this.state;
+
+    this.setState({
+      splitView: !splitView,
+    });
+  };
+
+  private getSplitViewDirection = (environment: string): SplitViewDirection => {
+    const environmentDirectionMap: Record<string, SplitViewDirection> = {
+      web: SplitViewDirection.Horizontal,
+      desktop: SplitViewDirection.Horizontal,
+      mobile: SplitViewDirection.Vertical,
+    };
+    return environmentDirectionMap[environment];
+  };
+
+  private truncateString(text: string, limit = 90) {
+    if (text.length <= limit) {
+      return text;
+    }
+    return text.substring(0, limit) + '...';
+  }
+
+  render() {
+    const { splitView, editable, spellcheck, isLoading } = this.state;
+
+    if (isLoading) {
+      return null;
+    }
+
+    const environment = this.editorKit?.environment ?? 'web';
+    const splitViewDirection = this.getSplitViewDirection(environment);
+
+    const customMenu: MenuConfig = [
+      ...menuConfig,
+      [
+        {
+          type: 'button',
+          icon: 'code',
+          active: () => splitView,
+          callback: this.toggleSplitView,
+          alwaysVisible: true,
+        },
+      ],
+    ];
+
+    return (
+      <SplitView split={splitView} direction={splitViewDirection}>
+        <MilkdownEditor
+          ref={this.milkdownRef}
+          onChange={this.onTextChange}
+          value={this.prevText}
+          menuConfig={customMenu}
+          editable={editable}
+          spellcheck={spellcheck}
+        />
+        <CodeMirrorEditor
+          ref={this.codeMirrorRef}
+          onChange={(text) =>
+            this.onTextChange(text, TextChangeSource.CodeMirror)
+          }
+          value={this.prevText}
+          editable={editable}
+          spellcheck={spellcheck}
+        />
+      </SplitView>
+    );
+  }
+}
+
 ReactDOM.render(
-  <React.StrictMode>
+  <StrictMode>
     <AppWrapper />
-  </React.StrictMode>,
+  </StrictMode>,
   document.getElementById('root')
 );
 

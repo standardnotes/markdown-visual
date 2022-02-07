@@ -26,6 +26,10 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+#root {
+  height: 100%;
+}
+
 .sn-component {
   display: flex;
   flex-direction: column;
@@ -36,41 +40,48 @@ html {
   }
 }
 
-.milkdown {
-  max-width: 100% !important;
-  box-shadow: none !important;
-  padding: 0 2.25rem !important;
-  background-color: var(--sn-stylekit-background-color) !important;
-  color: var(--sn-stylekit-editor-foreground-color) !important;
+.container {
+  flex: 1;
+  flex-grow: 1;
+  display: flex;
+  width: 100%;
+  height: 100%;
 
-  .emoji {
-    height: 1.5rem !important;
-    width: 1.5rem !important;
+  > .separator {
+    background-color: var(--sn-stylekit-border-color);
   }
 }
 
-.app-header {
-  text-align: right;
-  width: 100%;
-  padding-top: 5px;
+.container.horizontal {
+  flex-direction: row;
+  overflow-x: clip;
+
+  .column {
+    flex: 1;
+  }
+
+  .separator {
+    width: 10px;
+  }
 }
 
-.app-header .toggle-button {
-  cursor: pointer;
-  padding-right: 15px;
-  color: var(--sn-stylekit-editor-foreground-color) !important;
-}
+.container.vertical {
+  flex-direction: column;
+  overflow-y: clip;
 
-.milkdown .editor > * {
-  margin-top: 0 !important;
-  margin-bottom: 1.875rem !important;
-}
+  .row.full {
+    height: 100%;
+  }
 
-.cm-editor {
-  background-color: var(--sn-stylekit-background-color) !important;
-  color: var(--sn-stylekit-editor-foreground-color) !important;
+  .row.half {
+    height: 40%;
+  }
 
-  .cm-content {
-    caret-color: var(--sn-stylekit-editor-foreground-color) !important;
+  .separator {
+    height: 1%;
+  }
+
+  .row.half:last-child {
+    height: 59%;
   }
 }
