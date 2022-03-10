@@ -5,7 +5,6 @@ import {
   editorViewOptionsCtx,
 } from '@milkdown/core';
 import { clipboard } from '@milkdown/plugin-clipboard';
-import { emoji } from '@milkdown/plugin-emoji';
 import { listenerCtx, listener } from '@milkdown/plugin-listener';
 import { math } from '@milkdown/plugin-math';
 import { prism } from '@milkdown/plugin-prism';
@@ -56,7 +55,6 @@ export const createEditor = ({
     })
     .use(nord)
     .use(clipboard)
-    .use(emoji)
     .use(gfm)
     .use(listener)
     .use(math)
