@@ -1,6 +1,5 @@
 @import '~sn-stylekit/dist/stylekit.css';
 @import 'material-icons/iconfont/material-icons.css';
-@import '@fontsource/roboto';
 @import 'katex/dist/katex.min.css';
 @import 'prism/material-light.css';
 
@@ -24,6 +23,7 @@ html {
 * {
   // To prevent gray flash when focusing input on mobile Safari
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-family: var(--sn-stylekit-sans-serif-font);
 }
 
 #root {
