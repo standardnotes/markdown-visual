@@ -1,3 +1,5 @@
+import './styles.scss';
+
 import { memo } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 
