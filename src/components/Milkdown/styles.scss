@@ -86,7 +86,7 @@
 
           > * {
             margin-top: 0 !important;
-            margin-bottom: 1.875rem !important;
+            margin-bottom: 0.875rem !important;
           }
 
           h1.heading.h1 {
@@ -129,12 +129,14 @@
 
             th {
               color: var(--sn-stylekit-neutral-contrast-color);
-              background-color: var(--sn-stylekit-neutral-color);
+              border: var(--lineWidth) solid var(--sn-stylekit-border-color);
+              background-color: var(--sn-stylekit-neutral-color) !important;
             }
 
             td {
               color: var(--sn-stylekit-paragraph-text-color);
-              background-color: var(--sn-stylekit-contrast-background-color);
+              border: var(--lineWidth) solid var(--sn-stylekit-border-color);
+              background: inherit;
             }
           }
 
@@ -151,7 +153,6 @@
           }
 
           code {
-            color: var(--sn-stylekit-contrast-background-color);
             background-color: var(--sn-stylekit-paragraph-text-color);
           }
         }
@@ -212,6 +213,10 @@
           input::placeholder {
             color: var(--sn-stylekit-neutral-color) !important;
           }
+        }
+
+        .paragraph {
+          line-height: 1rem;
         }
       }
     }
