@@ -86,7 +86,7 @@
 
           > * {
             margin-top: 0 !important;
-            margin-bottom: 1.875rem !important;
+            margin-bottom: 0.875rem !important;
           }
 
           h1.heading.h1 {
@@ -212,6 +212,10 @@
           input::placeholder {
             color: var(--sn-stylekit-neutral-color) !important;
           }
+        }
+
+        .paragraph {
+          line-height: 1rem;
         }
       }
     }
