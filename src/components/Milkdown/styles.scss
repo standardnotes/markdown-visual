@@ -129,12 +129,14 @@
 
             th {
               color: var(--sn-stylekit-neutral-contrast-color);
-              background-color: var(--sn-stylekit-neutral-color);
+              border: var(--lineWidth) solid var(--sn-stylekit-border-color);
+              background-color: var(--sn-stylekit-neutral-color) !important;
             }
 
             td {
               color: var(--sn-stylekit-paragraph-text-color);
-              background-color: var(--sn-stylekit-contrast-background-color);
+              border: var(--lineWidth) solid var(--sn-stylekit-border-color);
+              background: inherit;
             }
           }
 
