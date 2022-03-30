@@ -131,6 +131,7 @@
               color: var(--sn-stylekit-neutral-contrast-color);
               border: var(--lineWidth) solid var(--sn-stylekit-border-color);
               background-color: var(--sn-stylekit-neutral-color) !important;
+              background-clip: padding-box;
             }
 
             td {
