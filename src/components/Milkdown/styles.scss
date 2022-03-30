@@ -153,7 +153,8 @@
           }
 
           code {
-            background-color: var(--sn-stylekit-paragraph-text-color);
+            color: var(--sn-stylekit-background-color);
+            background-color: var(--sn-stylekit-foreground-color);
           }
         }
 
