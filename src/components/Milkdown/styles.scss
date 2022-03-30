@@ -110,7 +110,7 @@
           }
 
           p.paragraph {
-            font-size: 0.9rem !important;
+            font-size: var(--sn-stylekit-font-size-editor) !important;
           }
 
           .strike-through {
