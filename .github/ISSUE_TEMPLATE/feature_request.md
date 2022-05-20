@@ -2,10 +2,12 @@
 name: Feature request
 about: Suggest an idea for this project
 title: ''
-labels: ''
+labels: enhancement
 assignees: ''
 
 ---
+
+**Have you read the [Longevity Statement](https://standardnotes.org/longevity)?**
 
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]

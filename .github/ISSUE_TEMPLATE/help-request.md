@@ -1,14 +1,14 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: Help request
+about: Ask for help
 title: ''
-labels: bug
-assignees: ''
+labels: help wanted
+assignees:
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Describe the issue**
+A clear and concise description of what the issue is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
