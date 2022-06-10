@@ -40,6 +40,7 @@ export const createEditor = ({
   const editor = Editor.make()
     .config((ctx) => {
       ctx.set(rootCtx, root);
+      value && ctx.set(defaultValueCtx, value);
 
       ctx.get(listenerCtx).markdownUpdated((_, markdown) => {
         onChange(markdown);
@@ -50,8 +51,6 @@ export const createEditor = ({
       });
 
       root?.setAttribute('spellcheck', JSON.stringify(spellcheck));
-
-      value && ctx.set(defaultValueCtx, value);
     })
     .use(nord)
     .use(clipboard)
@@ -68,7 +67,6 @@ export const createEditor = ({
     .use(
       menu({
         config: menuConfig,
-        enabled: editable,
       })
     );
 
