@@ -8,13 +8,8 @@ import { button, ButtonConfig } from './button';
 import { MenuConfig, MenuConfigItem } from './config';
 import { divider, DividerConfig } from './divider';
 import { select, SelectConfig } from './select';
-import { MenuBar } from './menuBar';
 
 type InnerConfig = (MenuConfigItem | DividerConfig) & { $: HTMLElement };
-
-export type ManagerOptions = {
-  enabled: boolean;
-};
 
 export class Manager {
   private config: InnerConfig[];
@@ -23,8 +18,8 @@ export class Manager {
     originalConfig: MenuConfig,
     private utils: Utils,
     private ctx: Ctx,
-    view: EditorView,
-    private options: ManagerOptions
+    menu: HTMLElement,
+    view: EditorView
   ) {
     this.config = originalConfig
       .map((xs) =>
@@ -51,12 +46,11 @@ export class Manager {
       })
       .flat();
 
-    const menu = MenuBar(utils, view);
     this.config.forEach((x) => menu.appendChild(x.$));
   }
 
   public update(view: EditorView) {
-    const { enabled } = this.options;
+    const enabled = view.editable;
 
     this.config.forEach((config) => {
       switch (config.type) {
@@ -127,16 +121,13 @@ export class Manager {
 
     switch (item.type) {
       case 'button': {
-        const $ = button(utils, item, ctx, view, this.options);
-        return $;
+        return button(utils, item, ctx, view);
       }
       case 'select': {
-        const $ = select(utils, item, ctx, view, this.options);
-        return $;
+        return select(utils, item, ctx, view);
       }
       case 'divider': {
-        const $ = divider(utils, item);
-        return $;
+        return divider(utils, item);
       }
       default:
         throw new Error();

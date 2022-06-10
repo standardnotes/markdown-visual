@@ -6,7 +6,6 @@ import { EditorView } from '@milkdown/prose';
 import { Utils } from '@milkdown/utils';
 
 import type { MenuCommonConfig } from './config';
-import { ManagerOptions } from './manager';
 
 type SelectOptions = {
   id: string;
@@ -26,8 +25,7 @@ export const select = (
   utils: Utils,
   config: SelectConfig,
   ctx: Ctx,
-  view: EditorView,
-  options: ManagerOptions
+  view: EditorView
 ) => {
   const selectStyle = utils.getStyle((themeTool) => {
     return css`
@@ -158,8 +156,7 @@ export const select = (
     return selectorWrapper;
   }
 
-  const disabled =
-    !options.enabled || (config.disabled && config.disabled(view));
+  const disabled = !view.editable || (config.disabled && config.disabled(view));
   if (disabled) {
     selector.classList.add('disabled');
     selector.children[0].setAttribute('disabled', 'true');

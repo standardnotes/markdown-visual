@@ -7,7 +7,6 @@ import type { EditorView } from '@milkdown/prose';
 import type { Utils } from '@milkdown/utils';
 
 import type { MenuCommonConfig } from './config';
-import { ManagerOptions } from './manager';
 
 type RequireAtLeastOne<T, Keys extends keyof T = keyof T> = Pick<
   T,
@@ -33,8 +32,7 @@ export const button = (
   utils: Utils,
   config: Config,
   ctx: Ctx,
-  view: EditorView,
-  options: ManagerOptions
+  view: EditorView
 ) => {
   const buttonStyle = utils.getStyle((themeTool) => {
     return css`
@@ -101,8 +99,7 @@ export const button = (
     return $button;
   }
 
-  const disabled =
-    !options.enabled || (config.disabled && config.disabled(view));
+  const disabled = !view.editable || (config.disabled && config.disabled(view));
   if (disabled) {
     $button.setAttribute('disabled', 'true');
   } else {
